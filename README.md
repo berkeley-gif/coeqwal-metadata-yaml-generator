@@ -20,6 +20,18 @@ npm run docker
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/postgres?schema=public"
 ```
 
+4. Run the prisma migrations to create the database:
+
+```bash
+npx prisma migrate deploy
+```
+
+5. Run the development server:
+
+```bash
+npm run dev
+```
+
 ## Changing the database schema
 
 If you need to add / modify the database layout, you should do so using prisma migrations.
