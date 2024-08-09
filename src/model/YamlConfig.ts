@@ -1,19 +1,16 @@
 import { YamlConfig } from "@prisma/client";
-import { Dayjs } from "dayjs";
+import { z } from "zod";
 
 // re-export YamlConfig from Prisma
 export type { YamlConfig };
 
-export type YamlConfigFrontend = {
-  id: string;
-  createdAt: Dayjs;
-  updatedAt: Dayjs;
-  study_name: string;
-  alias: string;
-  url: string;
-  created: Dayjs;
-  last_modified: Dayjs;
-  version: number;
-  provenance_source: string;
-  provenance_source_access_or_creation_date: Dayjs;
-};
+export const schema = z.object({
+  study_name: z.string(),
+  alias: z.string(),
+  url: z.string(),
+  created: z.date(),
+  last_modified: z.date(),
+  version: z.number(),
+  provenance_source: z.string(),
+  provenance_source_access_or_creation_date: z.date(),
+});

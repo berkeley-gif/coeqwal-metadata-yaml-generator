@@ -1,68 +1,93 @@
 'use client'
 
+import { createYamlConfig } from "@/actions";
 import { Button, Stack, TextField, Typography } from "@mui/material";
-import { useState } from "react";
-import { DatePicker, DateTimePicker } from "@mui/x-date-pickers";
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { DatePicker, DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
-import CustomNumberInput from "@/components/NumberInput";
-import { YamlConfigFrontend } from "@/model/YamlConfig";
+import { useState } from "react";
+import { useFormState, useFormStatus } from "react-dom";
+
+const initialState = {
+  id: "",
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  study_name: "",
+  alias: "",
+  url: "",
+  created: new Date(),
+  last_modified: new Date(),
+  version: 1,
+  provenance_source: "",
+  provenance_source_access_or_creation_date: new Date(),
+};
+
+const SubmitButton = () => {
+  const { pending } = useFormStatus();
+  return <Button variant="contained" type="submit" color="primary" disabled={pending}>Submit</Button>;
+};
 
 export default function YamlConfigOverview() {
 
-  const [formValues, setFormValues] = useState<YamlConfigFrontend>({
-    id: "",
-    createdAt: dayjs(),
-    updatedAt: dayjs(),
-    study_name: "",
-    alias: "",
-    url: "",
-    created: dayjs(),
-    last_modified: dayjs(),
-    version: 1,
-    provenance_source: "",
-    provenance_source_access_or_creation_date: dayjs(),
+  const [state, formAction] = useFormState(createYamlConfig, initialState);
+
+  const [controlledValues, setControlledValues] = useState({
+    created: dayjs(initialState.created),
+    last_modified: dayjs(initialState.last_modified),
+    provenance_source_access_or_creation_date: dayjs(initialState.provenance_source_access_or_creation_date),
   });
-
-  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    console.log('Form submitted', formValues);
-    event.preventDefault();
-    try {
-      const result = await (await fetch('/api/yaml-config', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formValues)
-      })).json();
-      console.log('Result', result);
-      // client-side redirect
-      window.location.href = '/yaml-config';
-
-    } catch (error) {
-      console.error('Error submitting form', error);
-    }
-  };
 
   return (
     <main>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <form method="post" onSubmit={handleFormSubmit} action="">
+        {"errors" in state && <Typography color="error">Something went wrong</Typography> }
+        <form action={formAction}>
           <Stack spacing={2} marginBlockEnd={2}>
-            <TextField label="Study Name" value={formValues.study_name} onChange={(e) => setFormValues({ ...formValues, study_name: e.target.value })} />
-            <TextField label="Alias" value={formValues.alias} onChange={(e) => setFormValues({ ...formValues, alias: e.target.value })} />
-            <TextField label="URL" value={formValues.url} onChange={(e) => setFormValues({ ...formValues, url: e.target.value })} />
-            <DateTimePicker label="Created" value={formValues.created} onChange={(date: Dayjs | null) => date !== null && setFormValues({ ...formValues, created: date })} />
-            <DateTimePicker label="Last Modified" value={formValues.last_modified} onChange={(date: Dayjs | null) => date !== null && setFormValues({ ...formValues, last_modified: date })} />
-            <CustomNumberInput aria-label="Version" placeholder="Version" value={formValues.version} onChange={(event, value) => value !== null && setFormValues({ ...formValues, version: value })} />
+
+            <TextField name="study_name" label="Study Name" defaultValue={initialState.study_name} error={"errors" in state && state.errors.study_name !== undefined } helperText={"errors" in state && state.errors.study_name} />
+            <TextField name="alias" label="Alias" defaultValue={initialState.alias} error={"errors" in state && state.errors.alias !== undefined } helperText={"errors" in state && state.errors.alias} />
+            <TextField name="url" label="URL" defaultValue={initialState.url} error={"errors" in state && state.errors.url !== undefined } helperText={"errors" in state && state.errors.url} />
+
+            <DateTimePicker
+              label="Created" value={controlledValues.created} onChange={(date: Dayjs | null) => date !== null && setControlledValues({ ...controlledValues, created: date })}
+              slotProps={{
+                textField: {
+                  error: "errors" in state && state.errors.created !== undefined ,
+                  helperText: "errors" in state && state.errors.created ,
+                },
+              }}
+            />
+            <input type="hidden" name="created" value={controlledValues.created.toISOString()} />
+            
+            <DateTimePicker
+              label="Last Modified" value={controlledValues.last_modified} onChange={(date: Dayjs | null) => date !== null && setControlledValues({ ...controlledValues, last_modified: date })}
+              slotProps={{
+                textField: {
+                  error: "errors" in state && state.errors.last_modified !== undefined ,
+                  helperText: "errors" in state && state.errors.last_modified ,
+                },
+              }}
+            />
+            <input type="hidden" name="last_modified" value={controlledValues.last_modified.toISOString()} />
+
+            <TextField name="version" aria-label="Version" placeholder="Version" defaultValue={initialState.version} error={"errors" in state && state.errors.version !== undefined } helperText={"errors" in state && state.errors.version} />
 
             <Typography variant="h6">Provenance</Typography>
-            <TextField label="Source" value={formValues.provenance_source} onChange={(e) => setFormValues({ ...formValues, provenance_source: e.target.value })} />
-            <DatePicker label="Source Access or Creation Date" views={['year']} value={formValues.provenance_source_access_or_creation_date} onChange={(date: Dayjs | null) => date !== null && setFormValues({ ...formValues, provenance_source_access_or_creation_date: date })} />
+            <TextField name="provenance_source" label="Source" defaultValue={initialState.provenance_source} />
+            <DatePicker
+              name="provenance_source_access_or_creation_date" label="Source Access or Creation Date" views={['year']} value={controlledValues.provenance_source_access_or_creation_date} onChange={(date: Dayjs | null) => date !== null && setControlledValues({ ...controlledValues, provenance_source_access_or_creation_date: date })}
+              slotProps={{
+                textField: {
+                  error: "errors" in state && state.errors.provenance_source_access_or_creation_date !== undefined ,
+                  helperText: "errors" in state && state.errors.provenance_source_access_or_creation_date ,
+                },
+              }}
+            />
+            <input type="hidden" name="provenance_source_access_or_creation_date" value={controlledValues.provenance_source_access_or_creation_date.toISOString()} />
+
           </Stack>
           <Stack spacing={2}>
-            <Button variant="contained" type="submit" color="primary">Submit</Button>
+            <SubmitButton />
           </Stack>
         </form>
       </LocalizationProvider>
