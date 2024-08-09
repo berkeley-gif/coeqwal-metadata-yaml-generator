@@ -5,7 +5,7 @@ import { z } from "zod";
 export type { YamlConfig };
 
 export const schema = z.object({
-  study_name: z.string(),
+  study_name: z.string().min(1),
   alias: z.string(),
   url: z.string(),
   created: z.date(),

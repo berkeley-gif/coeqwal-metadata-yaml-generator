@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { Container, Typography } from "@mui/material";
 
 import { notFound } from 'next/navigation'
 
@@ -16,13 +17,15 @@ export default async function YamlConfigView({ params }: { params: { id: string 
   }
 
   return <main>
-    <h1>
-      YAML Config
-    </h1>
-    <div>
-      <pre>
-        {JSON.stringify(yamlConfig, null, 2)}
-      </pre>
-    </div>
+    <Container>
+      <Typography variant="h4" sx={{ mt: 3, mb: 2 }}>
+        YAML Config
+      </Typography>
+      <div>
+        <pre>
+          {JSON.stringify(yamlConfig, null, 2)}
+        </pre>
+      </div>
+    </Container>
   </main>
 }
