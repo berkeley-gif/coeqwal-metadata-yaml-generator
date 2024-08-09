@@ -16,15 +16,15 @@ datasource db {
 model YamlConfig {
   id            String   @id @default(uuid())
   createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  updatedAt     DateTime @default(now())
   
   study_name    String @default("")
   alias         String @default("")
   url           String @default("")
   created       DateTime @default("1970-01-01T00:00:00.000Z")
   last_modified DateTime @default("1970-01-01T00:00:00.000Z")
-  version       Int @default(0)
+  version       String @default("")
 
-  provenance_source                         String @default("")
-  provenance_source_access_or_creation_date DateTime @default("1970-01-01T00:00:00.000Z")
+  provenance_baseline_source                         String @default("")
+  provenance_source_access_date                      DateTime @default("1970-01-01T00:00:00.000Z")
 }

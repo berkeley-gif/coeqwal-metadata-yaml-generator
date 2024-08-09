@@ -10,7 +10,7 @@ export const schema = z.object({
   url: z.string(),
   created: z.date(),
   last_modified: z.date(),
-  version: z.number(),
-  provenance_source: z.string(),
-  provenance_source_access_or_creation_date: z.date(),
+  version: z.string(),
+  provenance_baseline_source: z.string(),
+  provenance_source_access_date: z.date(),
 });

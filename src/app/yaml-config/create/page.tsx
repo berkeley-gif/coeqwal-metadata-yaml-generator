@@ -17,9 +17,9 @@ const initialState = {
   url: "",
   created: new Date(),
   last_modified: new Date(),
-  version: 1,
-  provenance_source: "",
-  provenance_source_access_or_creation_date: new Date(),
+  version: "0.0.1",
+  provenance_baseline_source: "",
+  provenance_source_access_date: new Date(),
 };
 
 const SubmitButton = () => {
@@ -34,7 +34,7 @@ export default function YamlConfigOverview() {
   const [controlledValues, setControlledValues] = useState({
     created: dayjs(initialState.created),
     last_modified: dayjs(initialState.last_modified),
-    provenance_source_access_or_creation_date: dayjs(initialState.provenance_source_access_or_creation_date),
+    provenance_source_access_date: dayjs(initialState.provenance_source_access_date),
   });
 
   return (
@@ -73,17 +73,17 @@ export default function YamlConfigOverview() {
             <TextField name="version" aria-label="Version" placeholder="Version" defaultValue={initialState.version} error={"errors" in state && state.errors.version !== undefined } helperText={"errors" in state && state.errors.version} />
 
             <Typography variant="h6">Provenance</Typography>
-            <TextField name="provenance_source" label="Source" defaultValue={initialState.provenance_source} />
+            <TextField name="provenance_baseline_source" label="Source" defaultValue={initialState.provenance_baseline_source} />
             <DatePicker
-              name="provenance_source_access_or_creation_date" label="Source Access or Creation Date" views={['year']} value={controlledValues.provenance_source_access_or_creation_date} onChange={(date: Dayjs | null) => date !== null && setControlledValues({ ...controlledValues, provenance_source_access_or_creation_date: date })}
+              name="provenance_source_access_date" label="Source Access or Creation Date" views={['year']} value={controlledValues.provenance_source_access_date} onChange={(date: Dayjs | null) => date !== null && setControlledValues({ ...controlledValues, provenance_source_access_date: date })}
               slotProps={{
                 textField: {
-                  error: "errors" in state && state.errors.provenance_source_access_or_creation_date !== undefined ,
-                  helperText: "errors" in state && state.errors.provenance_source_access_or_creation_date ,
+                  error: "errors" in state && state.errors.provenance_source_access_date !== undefined ,
+                  helperText: "errors" in state && state.errors.provenance_source_access_date ,
                 },
               }}
             />
-            <input type="hidden" name="provenance_source_access_or_creation_date" value={controlledValues.provenance_source_access_or_creation_date.toISOString()} />
+            <input type="hidden" name="provenance_source_access_date" value={controlledValues.provenance_source_access_date.toISOString()} />
 
           </Stack>
           <Stack spacing={2}>
