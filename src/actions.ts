@@ -45,6 +45,4 @@ export async function createYamlConfig(
   }
 
   redirect(`/yaml-config/${insertedData.id}`);
-
-  return insertedData;
 }
