@@ -10,6 +10,9 @@ export default async function YamlConfigView({ params }: { params: { id: string 
   const yamlConfig = await prisma.yamlConfig.findUnique({
     where: {
       id: params.id
+    },
+    include: {
+      dependencies: true
     }
   });
 

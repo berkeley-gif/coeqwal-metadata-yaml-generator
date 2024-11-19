@@ -27,4 +27,36 @@ model YamlConfig {
 
   provenance_baseline_source                         String @default("")
   provenance_source_access_date                      DateTime @default("1970-01-01T00:00:00.000Z")
+
+  dependencies   Dependency[]
+  assumptions    YamlConfigAssumption[]
+}
+
+model Dependency {
+  id            String   @id @default(uuid())
+  name          String @default("")
+
+  YamlConfig YamlConfig[]
+}
+
+model YamlConfigAssumption {
+  id            String   @id @default(uuid())
+  name          String @default("")
+  kindId        String
+  source        String @default("")
+  source_access_date DateTime @default("1970-01-01T00:00:00.000Z")
+  version       String @default("")
+  description   String @default("")
+  file          String @default("")
+  
+  kind          AssumptionKind @relation(fields: [kindId], references: [id])
+
+  YamlConfig YamlConfig[]
+}
+
+model AssumptionKind {
+  id            String   @id @default(uuid())
+  name          String @default("")
+
+  YamlConfigAssumption YamlConfigAssumption[]
 }

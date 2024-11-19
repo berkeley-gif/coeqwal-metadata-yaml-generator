@@ -21,6 +21,7 @@ export async function createYamlConfig(
     version: formData.get("version") as string,
     provenance_baseline_source: formData.get("provenance_baseline_source") as string,
     provenance_source_access_date: new Date(formData.get("provenance_source_access_date") as string),
+    dependencies: JSON.parse(formData.get("dependencies") as string),
   };
 
   const validatedFields = schema.safeParse(submittedData);
@@ -33,8 +34,21 @@ export async function createYamlConfig(
 
   const data = validatedFields.data;
 
+  // Ensure dependencies exist
+  for (const dependency of data.dependencies) {
+    await prisma.dependency.upsert({
+      where: { id: dependency.id },
+      update: {},
+      create: { id: dependency.id, name: dependency.name },
+    });
+  }
   const insertedData = await prisma.yamlConfig.create({
-    data,
+    data: {
+      ...data,
+      dependencies: {
+        connect: data.dependencies.map((dependency: { id: string }) => ({ id: dependency.id })),
+      },
+    },
   });
 
   if (!insertedData) {

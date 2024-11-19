@@ -1,8 +1,9 @@
-import { YamlConfig } from "@prisma/client";
+import { YamlConfig, Dependency } from "@prisma/client";
 import { z } from "zod";
 
-// re-export YamlConfig from Prisma
-export type { YamlConfig };
+export interface YamlConfigWithDependencies extends YamlConfig {
+  dependencies: Dependency[];
+}
 
 export const schema = z.object({
   study_name: z.string().min(1),
@@ -13,9 +14,13 @@ export const schema = z.object({
   version: z.string(),
   provenance_baseline_source: z.string(),
   provenance_source_access_date: z.date(),
+  dependencies: z.array(z.object({
+    id: z.string(),
+    name: z.string(),
+  })),
 });
 
-export const toYAML = (yamlConfig: YamlConfig) => {
+export const toYAML = (yamlConfig: YamlConfigWithDependencies) => {
   return `study_name: ${yamlConfig.study_name}
 alias: ${yamlConfig.alias}
 url: ${yamlConfig.url}
@@ -25,5 +30,6 @@ version: ${yamlConfig.version}
 provenance:
   baseline_source: ${yamlConfig.provenance_baseline_source}
   source_access_date: ${yamlConfig.provenance_source_access_date.toISOString().substring(0, 4)}
-`;
+dependencies:
+${yamlConfig.dependencies.map((dep) => `  - ${dep.name}`).join("\n")}`;
 };
