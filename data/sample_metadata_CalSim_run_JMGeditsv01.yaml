@@ -1,0 +1,124 @@
+study_name: coeqwal_c2035TaiESM1H_baseline {coeqwal}_{cs3}_{operationsID}_{climate_scen}_{slr##}_{version#}
+alias: cqwl_c2035TaiESM1_bl # shortened version of study_name
+url: # Google Drive location - parent directory
+created: 2024-07-18
+last_modified: 2024-07-18
+version: 0.1.0  # might we make this a quasi-semantic version like what DWR has done? with X.Y.Z where X = climate scenario, Y = sea level rise scenario, Z = operations alternative? 
+collection: COEQWAL CalSim 3 complete model run files
+project_web_site: coeqwal.org
+provenance:
+  baseline_filename:
+  baseline_source: 
+  version:
+  date: 
+  description: Developed for COEQWAL Using DWR DCR 2023 Hist Adj as base, modified hydrology to reflect TaiESM1 VIC hydrology centered on 2035
+  source_access_date: 2024
+dependencies:
+  - WRIMS 2, release 2024-01-29
+modeler_contact:
+  name: James Gilbert
+  organization: NOAA Southwest Fisheries Science Center
+  project: COEQWAL, Collaboratory for Equity in Water Allocation
+  funding: University of California Climate Action Initiative
+coverage: California Central Valley {phrase or description of what CalSim3 covers - California agency water resource allocations to agricultural, municipal and industrial, and environmental uses}
+description: >-
+  Near term hydrologic change applied as period change factors using quantile mapping and 2021-2050 VIC hydrology from TaiESM1 LOCA2; applied to DWR DCR HistAdj baseline
+version_detail: >- 
+{description of things changed in code for this version}
+The code was developed by beginning with the DCR 2021 codebase, and applying improvements to WRESL, TABLE, and SV files.
+time_series_input: # should this specifically pertain to the SV file? how much detail for hydrology components that go in to SV file?
+  file_name: {SV filename}
+  type: historical, climate adjusted hydrology (with climate scenario)
+  version: 3.0
+  description: 2023 DWR HistAdj quantile-mapped to reflect 2021-2050 VIC hydrology from TaiESM1 LOCA2
+  file_location: 
+operations:
+ alias: DWR Baseline 2023
+ infrastructure: # examples of facility changes that may be considered - keys are separate projects
+   delta_conveyance: False #alternative: True, or an indicator of which variation of implementation
+   sites: False 
+   los_vaqueros_enlargement: False    
+ general_regulatory_environment:  # a listing of broad sets of regulations...not sure if this is helpful or confusing; where would VAs fit?
+   - {2023 VAs}
+   - {TUCPs}
+   - 2019 BiOp
+   - 2020 ITP
+   - 2018 COA Addendum
+ infrastructure:
+   (adapt assumptions structure)
+   name: DeltaConveyance
+   - {Sites}
+ priority_allocations:
+   - {M&I top priority}
+   - {CVP Equal Cuts}
+ minimum_flows:
+  - tributary: 
+    flow_regime
+    description
+    version
+   sacramento: 0 # 0: baseline, 1, 2, 3, ... would correspond to other options
+   feather: 0
+   yuba: 0
+   american: 0
+   stanislaus: 0
+   tuolumne: 0
+   merced: 0
+   sanjoaquin: 0
+assumptions:
+  - name: 2020 LOD
+    kind: land_use
+    source: 
+    source_access_date: 
+    version: 3.0
+    description: 2020 Land Use and Urban Demands
+    file: 
+    impact_on_demands: {San Joaquin Ag Reduced 10%}
+  - name: 15cm
+    kind: slr
+    source: 
+    source_access_date: 
+    version: 3.0
+    description: 15cm slr
+    file: Ann7inp_CS3_2040_SLR15cm_20230428_OneAPIx64.dll
+  - name: C2VSimVxx
+    kind: gwmodel
+    source: 
+    source_access_date:
+    version: xxx
+    description:
+    file: xxxx.dll
+ancillary_output:
+  groundwater: {filenames}
+postprocessing:
+(move this to a metadata file/description in a separate folder where performance metrics are stored)
+  performance_metrics:
+    method: 
+    version: 3.0
+    file: 
+keywords:
+  - CalSim 3
+  - water allocation
+  - California
+  - hydrology
+  - water resources
+  - adjusted hydroclimate
+  - Central Valley
+  - climate change
+usage:
+  license: CC BY 4.0
+  citation: COEQWAL (2024). CalSim Water Allocation Dataset. Version 1.0. Retrieved from [URL]
+  limitations: Data is simulated and may not perfectly represent real-world allocations. Users should validate against actual observed data.
+quality:
+  accuracy: Model accuracy assessed through comparison with historical observed data
+  validation: Validated using independent datasets for selected years
+  issues: Some minor discrepancies observed in regions with sparse data
+# move to post-processing metadata cluster_analysis:
+#  cluster: 
+scenarios_supported:
+  - name: Future Delta Outflows
+    origin: COEQWAL Advisory Cohort
+    objective: maintain delta outflows to support critical species under near term climate change regime
+    region: Delta
+    relevant_supporting_operations: 
+    selected_variables_file: 
+

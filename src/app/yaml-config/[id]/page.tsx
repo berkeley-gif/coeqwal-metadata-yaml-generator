@@ -25,7 +25,7 @@ export default async function YamlConfigView({ params }: { params: { id: string 
   return <main>
     <Container>
       <Typography variant="h4" sx={{ mt: 3, mb: 2 }}>
-        YAML Config
+        COEQWAL CalSim3 Metadata
       </Typography>
       <CodeCopyPaper code={yamlString} />
     </Container>

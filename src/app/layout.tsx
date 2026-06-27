@@ -7,7 +7,7 @@ import { AppBar, Button, CssBaseline, Toolbar, Typography } from "@mui/material"
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "YAML Generator",
+  title: "COEQWAL CalSim3 Scenario Metadata Generator",
   description: "Create YAML files with ease",
 };
 
@@ -26,10 +26,13 @@ export default function RootLayout({
               
               <Toolbar>
                 <Typography variant="h6" component="div" sx={{ mr: 2 }}>
-                  YAML Generator
+                  COEQWAL CalSim3 Scenario Metadata Generator
                 </Typography>
                 <Link href="/yaml-config" passHref>
                   <Button variant="contained" sx={{ boxShadow: 'none' }}>Overview</Button>
+                </Link>
+                <Link href="/yaml-config/create" passHref>
+                  <Button variant="contained" sx={{ boxShadow: 'none', ml: 1 }}>Create New Config</Button>
                 </Link>
               </Toolbar>
             </AppBar>

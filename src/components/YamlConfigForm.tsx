@@ -53,7 +53,21 @@ export default function YamlConfigForm({ config, dependencies, assumptionKinds }
   const [dependenciesIncludingNew, setDependenciesIncludingNew] = useState(dependencies);
   const [showNewDependency, setShowNewDependency] = useState(false);
 
-  const hasErrors = "errors" in state && Object.values(state.errors).some((value) => value !== undefined);
+  const fieldLabels: Record<string, string> = {
+    study_name: "Study Name",
+    alias: "Alias",
+    url: "URL",
+    created: "Created",
+    last_modified: "Last Modified",
+    version: "Version",
+    provenance_baseline_source: "Provenance Source",
+    provenance_source_access_date: "Source Access Date",
+    dependencies: "Dependencies",
+  };
+  const errorFields = ("errors" in state ? state.errors : {}) as Record<string, string[] | undefined>;
+  const errorEntries = Object.entries(errorFields)
+    .filter((entry): entry is [string, string[]] => Array.isArray(entry[1]) && entry[1].length > 0)
+    .map(([field, messages]) => [field, messages.join(", ")] as const);
 
   const handleAddDependency = () => {
     if (newDependency) {
@@ -73,7 +87,16 @@ export default function YamlConfigForm({ config, dependencies, assumptionKinds }
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Container>
         <Typography variant="h4" sx={{ mt: 3, mb: 2 }}>Create YAML Config</Typography>
-        {hasErrors && <Alert severity="error" sx={{ mb: 3 }}>Something went wrong</Alert> }
+        {errorEntries.length > 0 && (
+          <Alert severity="error" sx={{ mb: 3 }}>
+            Please fix the following before submitting:
+            <ul style={{ margin: "4px 0 0", paddingInlineStart: "1.25rem" }}>
+              {errorEntries.map(([field, message]) => (
+                <li key={field}>{fieldLabels[field] ?? field}: {message}</li>
+              ))}
+            </ul>
+          </Alert>
+        )}
       </Container>
       <form action={formAction}>
         <Container>
@@ -109,7 +132,7 @@ export default function YamlConfigForm({ config, dependencies, assumptionKinds }
             <Typography variant="h6">Provenance</Typography>
             <TextField name="provenance_baseline_source" label="Source" defaultValue={config.provenance_baseline_source} />
             <DatePicker
-              name="provenance_source_access_date" label="Source Access or Creation Date" views={['year']} value={controlledValues.provenance_source_access_date} onChange={(date: Dayjs | null) => date !== null && setControlledValues({ ...controlledValues, provenance_source_access_date: date })}
+              label="Source Access or Creation Date" views={['year']} value={controlledValues.provenance_source_access_date} onChange={(date: Dayjs | null) => date !== null && setControlledValues({ ...controlledValues, provenance_source_access_date: date })}
               slotProps={{
                 textField: {
                   error: "errors" in state && state.errors.provenance_source_access_date !== undefined ,
