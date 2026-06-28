@@ -26,7 +26,7 @@ Generated YAML, with one-click copy:
 
 ## Target metadata format
 
-The goal of this tool is to produce a metadata YAML describing a CalSim3 model run. The agreed-upon shape is captured in `data/sample_metadata_CalSim_run_JMGeditsv01.yaml`, which is the source of truth for the format (it includes illustrative placeholders in `{curly braces}` and inline comments noting open questions):
+We had created the shape of the metadata, `data/sample_metadata_CalSim_run_JMGeditsv01.yaml`:
 
 ```yaml
 study_name: coeqwal_c2035TaiESM1H_baseline {coeqwal}_{cs3}_{operationsID}_{climate_scen}_{slr##}_{version#}
@@ -228,7 +228,7 @@ With the app running at `http://localhost:3000`:
 
 ## Changing the database schema
 
-Use Prisma migrations, do not hand-edit the database:
+Use Prisma migrations:
 
 1. Edit `prisma/schema.prisma`.
 2. Generate and apply a migration:
@@ -262,7 +262,3 @@ prisma/
   migrations/                     Migration history
 docker-compose.yml                Local PostgreSQL service
 ```
-
-## Deployment
-
-Hosting is not yet set up. To deploy you would: push the repo to a Git host, provision a Postgres database, set `DATABASE_URL` in the host's environment, and run `prisma migrate deploy` against it.
