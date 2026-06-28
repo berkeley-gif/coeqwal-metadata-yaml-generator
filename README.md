@@ -10,9 +10,13 @@ Overview, lists saved configurations:
 
 ![Overview of saved scenario metadata configurations](docs/screenshots/overview.png)
 
+---
+
 Create a config, the metadata form:
 
 ![Create YAML Config form](docs/screenshots/create-form.png)
+
+---
 
 Generated YAML, with one-click copy:
 
