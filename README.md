@@ -22,6 +22,8 @@ Generated YAML, with one-click copy:
 
 ![Generated YAML output with copy button](docs/screenshots/yaml-output.png)
 
+---
+
 ## Target metadata format
 
 The goal of this tool is to produce a metadata YAML describing a CalSim3 model run. The agreed-upon shape is captured in `data/sample_metadata_CalSim_run_JMGeditsv01.yaml`, which is the source of truth for the format (it includes illustrative placeholders in `{curly braces}` and inline comments noting open questions):
